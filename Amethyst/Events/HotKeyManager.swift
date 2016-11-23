@@ -19,9 +19,9 @@ public typealias AMModifierFlags = UInt
 // Can be used to identify if a returned key code is valid or not.
 public let AMKeyCodeInvalid: AMKeyCode = 0xFF
 
-open class HotKey: NSObject {
-    open let hotKeyRef: EventHotKeyRef
-    open let handler: () -> ()
+public class HotKey: NSObject {
+    public let hotKeyRef: EventHotKeyRef
+    public let handler: () -> ()
 
     public init(hotKeyRef: EventHotKeyRef, handler: @escaping () -> ()) {
         self.hotKeyRef = hotKeyRef
@@ -31,10 +31,10 @@ open class HotKey: NSObject {
 
 public typealias HotKeyHandler = () -> ()
 
-open class HotKeyManager: NSObject {
-    fileprivate let userConfiguration: UserConfiguration
+public class HotKeyManager: NSObject {
+    private let userConfiguration: UserConfiguration
 
-    open lazy var stringToKeyCodes: [String: [AMKeyCode]] = {
+    public lazy var stringToKeyCodes: [String: [AMKeyCode]] = {
         return self.constructKeyCodeMap()
     }()
 
@@ -45,7 +45,7 @@ open class HotKeyManager: NSObject {
         MASShortcutValidator.shared().allowAnyShortcutWithOptionModifier = true
     }
 
-    fileprivate static func keyCodeForNumber(_ number: NSNumber) -> AMKeyCode {
+    private static func keyCodeForNumber(_ number: NSNumber) -> AMKeyCode {
         let string = "\(number)"
 
         guard string.characters.count > 0 else {
@@ -78,7 +78,7 @@ open class HotKeyManager: NSObject {
         }
     }
 
-    open func setUpWithHotKeyManager(_ windowManager: WindowManager, configuration: UserConfiguration) {
+    public func setUpWithHotKeyManager(_ windowManager: WindowManager, configuration: UserConfiguration) {
         constructCommandWithCommandKey(CommandKey.CycleLayoutForward.rawValue) {
             windowManager.focusedScreenManager()?.cycleLayoutForward()
         }
@@ -201,7 +201,7 @@ open class HotKeyManager: NSObject {
         }
     }
 
-    open func constructKeyCodeMap() -> [String: [AMKeyCode]] {
+    public func constructKeyCodeMap() -> [String: [AMKeyCode]] {
         var stringToKeyCodes: [String: [AMKeyCode]] = [:]
 
         // Generate unicode character keymapping from keyboard layout data.  We go
@@ -289,7 +289,7 @@ open class HotKeyManager: NSObject {
         userConfiguration.constructCommandWithHotKeyRegistrar(self, commandKey: commandKey, handler: handler)
     }
 
-    fileprivate func carbonModifiersFromModifiers(_ modifiers: UInt) -> UInt32 {
+    private func carbonModifiersFromModifiers(_ modifiers: UInt) -> UInt32 {
         var carbonModifiers: UInt32 = 0
 
         if (modifiers & UInt(NSEventModifierFlags.shift.rawValue)) > 0 {
@@ -311,7 +311,7 @@ open class HotKeyManager: NSObject {
         return carbonModifiers
     }
 
-    open static func hotKeyNameToDefaultsKey() -> [[String]] {
+    public static func hotKeyNameToDefaultsKey() -> [[String]] {
         var hotKeyNameToDefaultsKey: [[String]] = []
 
         hotKeyNameToDefaultsKey.append(["Cycle layout forward", CommandKey.CycleLayoutForward.rawValue])

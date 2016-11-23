@@ -14,11 +14,11 @@ public protocol FocusFollowsMouseManagerDelegate: class {
     func windowsForFocusFollowsMouse() -> [SIWindow]
 }
 
-open class FocusFollowsMouseManager {
-    open weak var delegate: FocusFollowsMouseManagerDelegate?
+public class FocusFollowsMouseManager {
+    public weak var delegate: FocusFollowsMouseManagerDelegate?
 
-    fileprivate let userConfiguration: UserConfiguration
-    fileprivate var mouseMovedEventHandler: AnyObject?
+    private let userConfiguration: UserConfiguration
+    private var mouseMovedEventHandler: AnyObject?
 
     public init(userConfiguration: UserConfiguration) {
         self.userConfiguration = userConfiguration
@@ -27,7 +27,7 @@ open class FocusFollowsMouseManager {
         } as AnyObject?
     }
 
-    fileprivate func focusWindowWithMouseMovedEvent(_ event: NSEvent) {
+    private func focusWindowWithMouseMovedEvent(_ event: NSEvent) {
         guard userConfiguration.focusFollowsMouse() else {
             return
         }

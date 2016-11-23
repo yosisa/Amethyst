@@ -10,9 +10,9 @@ import Cartography
 import Foundation
 import MASShortcut
 
-open class ShortcutsPreferencesListItemView: NSView {
-    open fileprivate(set) var nameLabel: NSTextField?
-    open fileprivate(set) var shortcutView: MASShortcutView?
+public class ShortcutsPreferencesListItemView: NSView {
+    public private(set) var nameLabel: NSTextField?
+    public private(set) var shortcutView: MASShortcutView?
 
     public override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)

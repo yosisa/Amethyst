@@ -17,22 +17,22 @@ open class Layout: NSObject {
     open class var layoutName: String { return "" }
     open class var layoutKey: String { return "" }
 
-    open let windowActivityCache: WindowActivityCache
+    public let windowActivityCache: WindowActivityCache
 
     public required init(windowActivityCache: WindowActivityCache) {
         self.windowActivityCache = windowActivityCache
         super.init()
     }
 
-    func reflowOperationForScreen(_ screen: NSScreen, withWindows windows: [SIWindow]) -> ReflowOperation {
+    open func reflowOperationForScreen(_ screen: NSScreen, withWindows windows: [SIWindow]) -> ReflowOperation {
         fatalError()
     }
 
-    func shrinkMainPane() {}
-    func expandMainPane() {}
-    func increaseMainPaneCount() {}
-    func decreaseMainPaneCount() {}
-    func updateWithChange(_ windowChange: WindowChange) {}
-    func nextWindowIDCounterClockwise() -> CGWindowID? { return nil }
-    func nextWindowIDClockwise() -> CGWindowID? { return nil }
+    open func shrinkMainPane() {}
+    open func expandMainPane() {}
+    open func increaseMainPaneCount() {}
+    open func decreaseMainPaneCount() {}
+    open func updateWithChange(_ windowChange: WindowChange) {}
+    open func nextWindowIDCounterClockwise() -> CGWindowID? { return nil }
+    open func nextWindowIDClockwise() -> CGWindowID? { return nil }
 }

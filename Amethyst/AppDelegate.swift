@@ -16,19 +16,19 @@ import RxCocoa
 import RxSwift
 import Sparkle
 
-open class AppDelegate: NSObject, NSApplicationDelegate {
-    fileprivate var loginItem: CCNLaunchAtLoginItem?
+public class AppDelegate: NSObject, NSApplicationDelegate {
+    private var loginItem: CCNLaunchAtLoginItem?
     @IBOutlet public var preferencesWindowController: CCNPreferencesWindowController?
 
-    fileprivate var windowManager: WindowManager?
-    fileprivate var hotKeyManager: HotKeyManager?
+    private var windowManager: WindowManager?
+    private var hotKeyManager: HotKeyManager?
 
     fileprivate var statusItem: NSStatusItem?
-    @IBOutlet open var statusItemMenu: NSMenu?
-    @IBOutlet open var versionMenuItem: NSMenuItem?
-    @IBOutlet open var startAtLoginMenuItem: NSMenuItem?
+    @IBOutlet public var statusItemMenu: NSMenu?
+    @IBOutlet public var versionMenuItem: NSMenuItem?
+    @IBOutlet public var startAtLoginMenuItem: NSMenuItem?
 
-    open func applicationDidFinishLaunching(_ notification: Notification) {
+    public func applicationDidFinishLaunching(_ notification: Notification) {
         if ProcessInfo.processInfo.arguments.index(of: "--log") == nil {
             LogManager.log?.minLevel = .warning
         } else {
@@ -80,7 +80,7 @@ open class AppDelegate: NSObject, NSApplicationDelegate {
         hotKeyManager?.setUpWithHotKeyManager(windowManager!, configuration: UserConfiguration.shared)
     }
 
-    open override func awakeFromNib() {
+    public override func awakeFromNib() {
         super.awakeFromNib()
 
         let version = Bundle.main.infoDictionary?["CFBundleVersion"] as! String
@@ -99,7 +99,7 @@ open class AppDelegate: NSObject, NSApplicationDelegate {
         startAtLoginMenuItem?.state = (loginItem!.isActive() ? NSOnState : NSOffState)
     }
 
-    @IBAction open func toggleStartAtLogin(_ sender: AnyObject) {
+    @IBAction public func toggleStartAtLogin(_ sender: AnyObject) {
         if startAtLoginMenuItem?.state == NSOffState {
             loginItem?.activate()
         } else {
@@ -108,7 +108,7 @@ open class AppDelegate: NSObject, NSApplicationDelegate {
         startAtLoginMenuItem?.state = (loginItem!.isActive() ? NSOnState : NSOffState)
     }
 
-    @IBAction open func relaunch(_ sender: AnyObject) {
+    @IBAction public func relaunch(_ sender: AnyObject) {
         let executablePath = Bundle.main.executablePath! as NSString
         let fileSystemRepresentedPath = executablePath.fileSystemRepresentation
         let fileSystemPath = FileManager.default.string(withFileSystemRepresentation: fileSystemRepresentedPath, length: Int(strlen(fileSystemRepresentedPath)))
@@ -116,7 +116,7 @@ open class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.terminate(self)
     }
 
-    @IBAction open func showPreferencesWindow(_ sender: AnyObject) {
+    @IBAction public func showPreferencesWindow(_ sender: AnyObject) {
         if UserConfiguration.shared.hasCustomConfiguration() {
             let alert = NSAlert()
             alert.alertStyle = .warning
@@ -128,7 +128,7 @@ open class AppDelegate: NSObject, NSApplicationDelegate {
         preferencesWindowController?.showPreferencesWindow()
     }
 
-    @IBAction open func checkForUpdates(_ sender: AnyObject) {
+    @IBAction public func checkForUpdates(_ sender: AnyObject) {
         #if RELEASE
             SUUpdater.shared().checkForUpdates(sender)
         #endif

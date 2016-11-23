@@ -17,9 +17,9 @@ public struct FrameAssignment {
 }
 
 open class ReflowOperation: Operation {
-    open let screen: NSScreen
-    open let windows: [SIWindow]
-    fileprivate let windowActivityCache: WindowActivityCache
+    public let screen: NSScreen
+    public let windows: [SIWindow]
+    private let windowActivityCache: WindowActivityCache
 
     public init(screen: NSScreen, windows: [SIWindow], windowActivityCache: WindowActivityCache) {
         self.screen = screen
@@ -28,7 +28,7 @@ open class ReflowOperation: Operation {
         super.init()
     }
 
-    open func adjustedFrameForLayout(_ screen: NSScreen) -> CGRect {
+    public func adjustedFrameForLayout(_ screen: NSScreen) -> CGRect {
         var frame = UserConfiguration.shared.ignoreMenuBar() ? screen.frameIncludingDockAndMenu() : screen.frameWithoutDockOrMenu()
 
         if UserConfiguration.shared.windowMargins() {
@@ -44,7 +44,7 @@ open class ReflowOperation: Operation {
         return frame
     }
 
-    open func performFrameAssignments(_ frameAssignments: [FrameAssignment]) {
+    public func performFrameAssignments(_ frameAssignments: [FrameAssignment]) {
         if self.isCancelled {
             return
         }
@@ -62,7 +62,7 @@ open class ReflowOperation: Operation {
         }
     }
 
-    fileprivate func assignFrame(_ frame: CGRect, toWindow window: SIWindow, focused: Bool, screenFrame: CGRect) {
+    private func assignFrame(_ frame: CGRect, toWindow window: SIWindow, focused: Bool, screenFrame: CGRect) {
         var padding = UserConfiguration.shared.windowMarginSize()
         var finalFrame = frame
 
