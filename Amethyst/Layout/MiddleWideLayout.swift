@@ -60,13 +60,13 @@ private class MiddleWideReflowOperation: ReflowOperation {
                 windowFrame.size.width = mainPaneWindowWidth
                 windowFrame.size.height = mainPaneWindowHeight
             } else if windowIndex > Int(secondaryPaneCount) { // tertiary
-                windowFrame.origin.x = screenFrame.origin.x + secondaryPaneWindowWidth + mainPaneWindowWidth
+                windowFrame.origin.x = screenFrame.origin.x
                 windowFrame.origin.y = screenFrame.origin.y + (tertiaryPaneWindowHeight * CGFloat(Double(windowIndex) - (1 + secondaryPaneCount)))
                 windowFrame.size.width = tertiaryPaneWindowWidth
                 windowFrame.size.height = tertiaryPaneWindowHeight
             } else { // secondary
-                windowFrame.origin.x = screenFrame.origin.x
-                windowFrame.origin.y = screenFrame.maxY - secondaryPaneWindowHeight * CGFloat(windowIndex)
+                windowFrame.origin.x = screenFrame.origin.x + (hasTertiaryPane ? secondaryPaneWindowWidth + mainPaneWindowWidth : 0)
+                windowFrame.origin.y = screenFrame.origin.y + secondaryPaneWindowHeight * (CGFloat(windowIndex - 1))
                 windowFrame.size.width = secondaryPaneWindowWidth
                 windowFrame.size.height = secondaryPaneWindowHeight
             }
