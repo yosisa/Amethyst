@@ -23,6 +23,8 @@ open class WindowManager: NSObject {
     internal var windows: [SIWindow] = []
     internal let windowModifier = WindowModifier()
     internal let userConfiguration: UserConfiguration
+    internal var lastFocusedWindowID: CGWindowID?
+    internal var focusedWindowID: CGWindowID?
 
     internal var screenManagers: [ScreenManager] = []
     fileprivate var screenManagersCache: [String: ScreenManager] = [:]
@@ -168,7 +170,7 @@ open class WindowManager: NSObject {
             return nil
         }
         for screenManager in screenManagers {
-            if screenManager.screen.screenIdentifier() == focusedWindow.screen().screenIdentifier() {
+            if screenManager.screen.screenIdentifier() == focusedWindow.screen()?.screenIdentifier() {
                 return screenManager
             }
         }
@@ -195,7 +197,11 @@ open class WindowManager: NSObject {
 
         applications.append(application)
 
+        let focusedWindowID = SIWindow.focused()?.windowID();
         for window in application.windows() as! [SIWindow] {
+            if window.windowID() == focusedWindowID {
+                updateFocusHistory(window)
+            }
             addWindow(window)
         }
 
@@ -218,6 +224,7 @@ open class WindowManager: NSObject {
             guard let focusedWindow = SIWindow.focused(), let screen = focusedWindow.screen() else {
                 return
             }
+            self.updateFocusHistory(focusedWindow)
             if self.windows.index(of: focusedWindow) == nil {
                 self.markScreenForReflow(screen, withChange: .unknown)
             } else {
@@ -238,7 +245,14 @@ open class WindowManager: NSObject {
         guard let focusedWindow = SIWindow.focused(), let screen = focusedWindow.screen() else {
             return
         }
+        updateFocusHistory(focusedWindow)
         markScreenForReflow(screen, withChange: .unknown)
+    }
+
+    fileprivate func updateFocusHistory(_ window: SIWindow) {
+        lastFocusedWindowID = focusedWindowID
+        focusedWindowID = window.windowID()
+        LogManager.log?.debug("Focus moved: \(lastFocusedWindowID) -> \(focusedWindowID)")
     }
 
     fileprivate func removeApplication(_ application: SIApplication) {
@@ -280,7 +294,17 @@ open class WindowManager: NSObject {
 
         regenerateActiveIDCache()
 
-        if userConfiguration.sendNewWindowsToMainPane() {
+        var index = -1
+        for (i, win) in windows.enumerated() {
+            if win.windowID() == lastFocusedWindowID {
+                index = i
+                break
+            }
+        }
+
+        if index != -1 {
+            windows.insert(window, at: index)
+        } else if userConfiguration.sendNewWindowsToMainPane() {
             windows.insert(window, at: 0)
         } else {
             windows.append(window)
